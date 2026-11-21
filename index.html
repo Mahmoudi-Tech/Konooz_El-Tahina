@@ -35,10 +35,19 @@
             --whatsapp-dark: #128C7E;
         }
 
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             background: var(--white);
             color: var(--text);
-            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
         }
 
         /* إصلاح عرض رقم الهاتف */
@@ -73,7 +82,6 @@
             padding: 5px;
         }
 
-        /* لوجو داخل شاشة الموك-أب */
         .phone-screen .app-logo {
             width: 110px;
             height: 110px;
@@ -141,13 +149,8 @@
             border-radius: 3px;
         }
 
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a:hover::after { width: 100%; }
 
         .nav-btn {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -176,7 +179,7 @@
             border: none;
         }
 
-        /* ===== القسم الرئيسي (Hero) ===== */
+        /* ===== Hero ===== */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -335,10 +338,8 @@
             color: #888;
         }
 
-        /* ===== قسم المميزات ===== */
-        .section {
-            padding: 100px 5%;
-        }
+        /* ===== Sections ===== */
+        .section { padding: 100px 5%; }
 
         .section-header {
             text-align: center;
@@ -352,9 +353,7 @@
             margin-bottom: 15px;
         }
 
-        .section-header h2 span {
-            color: var(--primary);
-        }
+        .section-header h2 span { color: var(--primary); }
 
         .section-header p {
             font-size: 18px;
@@ -399,9 +398,7 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
 
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
+        .feature-card:hover::before { transform: scaleX(1); }
 
         .feature-icon {
             width: 80px;
@@ -436,7 +433,7 @@
             font-size: 15px;
         }
 
-        /* ===== قسم التحميل ===== */
+        /* ===== Download ===== */
         .download {
             background: linear-gradient(135deg, var(--secondary), var(--dark));
             color: white;
@@ -507,9 +504,7 @@
             color: var(--primary);
         }
 
-        .store-btn div {
-            text-align: right;
-        }
+        .store-btn div { text-align: right; }
 
         .store-btn small {
             display: block;
@@ -523,7 +518,6 @@
             color: var(--dark);
         }
 
-        /* زر App Store - قريباً */
         .store-btn.coming-soon {
             cursor: not-allowed;
             opacity: 0.9;
@@ -537,17 +531,9 @@
             box-shadow: none;
         }
 
-        .store-btn.coming-soon i {
-            color: #999;
-        }
-
-        .store-btn.coming-soon small {
-            color: #aaa;
-        }
-
-        .store-btn.coming-soon strong {
-            color: #999;
-        }
+        .store-btn.coming-soon i { color: #999; }
+        .store-btn.coming-soon small { color: #aaa; }
+        .store-btn.coming-soon strong { color: #999; }
 
         .store-btn .soon-badge {
             position: absolute;
@@ -568,7 +554,7 @@
             50% { transform: scale(1.1); }
         }
 
-        /* ===== قسم التواصل ===== */
+        /* ===== Contact ===== */
         .contact {
             max-width: 1200px;
             margin: 0 auto;
@@ -603,6 +589,7 @@
         .contact-item i {
             width: 50px;
             height: 50px;
+            min-width: 50px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-radius: 15px;
@@ -626,6 +613,7 @@
         .contact-item div span {
             color: #777;
             font-size: 14px;
+            word-break: break-word;
         }
 
         .contact-form {
@@ -635,9 +623,7 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.08);
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         .form-group label {
             display: block;
@@ -691,7 +677,6 @@
             box-shadow: 0 10px 25px rgba(212, 160, 23, 0.4);
         }
 
-        /* ===== أزرار واتساب ===== */
         .whatsapp-btn {
             background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
             color: white;
@@ -715,9 +700,7 @@
             box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
         }
 
-        .whatsapp-btn i {
-            font-size: 22px;
-        }
+        .whatsapp-btn i { font-size: 22px; }
 
         .submit-btn.whatsapp {
             background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
@@ -758,7 +741,7 @@
             100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
-        /* ===== التذييل ===== */
+        /* ===== Footer ===== */
         footer {
             background: var(--dark);
             color: white;
@@ -808,9 +791,7 @@
             transform: translateY(-5px);
         }
 
-        .social-links a.wa:hover {
-            background: var(--whatsapp);
-        }
+        .social-links a.wa:hover { background: var(--whatsapp); }
 
         .footer-col h4 {
             font-size: 18px;
@@ -818,13 +799,9 @@
             color: var(--primary);
         }
 
-        .footer-col ul {
-            list-style: none;
-        }
+        .footer-col ul { list-style: none; }
 
-        .footer-col ul li {
-            margin-bottom: 12px;
-        }
+        .footer-col ul li { margin-bottom: 12px; }
 
         .footer-col ul li a {
             color: #aaa;
@@ -858,7 +835,24 @@
             border-bottom-color: var(--primary);
         }
 
-        /* ===== تصميم متجاوب ===== */
+        /* ===== تحسينات التجاوب الشاملة ===== */
+
+        /* شاشات كبيرة جداً (4K) */
+        @media (min-width: 1600px) {
+            .hero h1 { font-size: 64px; }
+            .section-header h2 { font-size: 48px; }
+            .features-grid, .footer-content, .contact { max-width: 1400px; }
+        }
+
+        /* تابلت كبير (992px - 1200px) */
+        @media (max-width: 1200px) {
+            .navbar { padding: 15px 4%; }
+            .section { padding: 80px 4%; }
+            .hero { padding: 110px 4% 50px; }
+            .download { margin: 50px 4%; padding: 70px 25px; }
+        }
+
+        /* تابلت (768px - 992px) */
         @media (max-width: 992px) {
             .hero {
                 flex-direction: column;
@@ -866,38 +860,34 @@
                 padding-top: 100px;
             }
 
-            .hero-content {
-                margin-bottom: 50px;
-            }
-
-            .hero h1 {
-                font-size: 42px;
-            }
-
-            .hero p {
-                margin: 0 auto 30px;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-            }
-
-            .contact-container {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-            }
+            .hero-content { margin-bottom: 50px; }
+            .hero h1 { font-size: 38px; }
+            .hero p { margin: 0 auto 30px; }
+            .hero-buttons { justify-content: center; }
+            .section-header h2 { font-size: 34px; }
+            .section-header p { font-size: 16px; }
+            .download h2 { font-size: 32px; }
+            .download p { font-size: 16px; }
+            .contact-container { grid-template-columns: 1fr; }
+            .contact-info h3 { font-size: 26px; }
+            .footer-content { grid-template-columns: 1fr 1fr; gap: 30px; }
+            .store-btn { min-width: 180px; padding: 14px 25px; }
+            .store-btn i { font-size: 30px; }
+            .phone-mockup { width: 270px; height: 540px; }
         }
 
+        /* موبايل كبير (576px - 768px) */
         @media (max-width: 768px) {
+            .navbar { padding: 12px 4%; }
+            .navbar .logo { font-size: 22px; }
+            .navbar .logo img { width: 40px; height: 40px; }
+
             .nav-links {
                 position: fixed;
-                top: 70px;
+                top: 65px;
                 right: -100%;
                 width: 100%;
-                height: calc(100vh - 70px);
+                height: calc(100vh - 65px);
                 background: white;
                 flex-direction: column;
                 padding: 40px;
@@ -905,48 +895,54 @@
                 box-shadow: -10px 0 30px rgba(0,0,0,0.1);
             }
 
-            .nav-links.active {
-                right: 0;
-            }
+            .nav-links.active { right: 0; }
+            .menu-toggle { display: block; }
+            .nav-btn { display: none; }
 
-            .menu-toggle {
-                display: block;
-            }
+            .hero { padding: 95px 4% 40px; min-height: auto; }
+            .hero h1 { font-size: 30px; line-height: 1.3; }
+            .hero p { font-size: 15px; }
+            .hero-badge { font-size: 12px; padding: 6px 15px; }
+            .btn-primary, .btn-secondary { padding: 13px 28px; font-size: 14px; }
 
-            .nav-btn {
-                display: none;
-            }
+            .section { padding: 60px 4%; }
+            .section-header { margin-bottom: 40px; }
+            .section-header h2 { font-size: 26px; }
+            .section-header p { font-size: 15px; }
+            .features-grid { gap: 20px; }
+            .feature-card { padding: 30px 20px; }
+            .feature-card h3 { font-size: 19px; }
+            .feature-card p { font-size: 14px; }
+            .feature-icon { width: 65px; height: 65px; font-size: 28px; margin-bottom: 18px; }
 
-            .hero h1 {
-                font-size: 32px;
-            }
+            .download { margin: 40px 4%; padding: 55px 20px; border-radius: 30px; }
+            .download h2 { font-size: 24px; }
+            .download p { font-size: 14px; margin-bottom: 30px; }
+            .store-buttons { gap: 15px; }
+            .store-btn { padding: 12px 20px; min-width: 100%; justify-content: center; }
+            .store-btn strong { font-size: 16px; }
+            .store-btn small { font-size: 11px; }
+            .store-btn i { font-size: 26px; }
 
-            .section-header h2 {
-                font-size: 30px;
-            }
+            .contact-info h3 { font-size: 22px; }
+            .contact-info p { font-size: 14px; }
+            .contact-item i { width: 45px; height: 45px; min-width: 45px; font-size: 18px; }
+            .contact-item div strong { font-size: 15px; }
+            .contact-item div span { font-size: 13px; }
+            .contact-form { padding: 25px 20px; }
+            .form-group input, .form-group textarea { padding: 12px; font-size: 14px; }
+            .submit-btn { padding: 14px; font-size: 15px; }
+            .whatsapp-btn { padding: 13px 25px; font-size: 14px; }
 
-            .download h2 {
-                font-size: 28px;
-            }
+            .phone-mockup { width: 240px; height: 480px; }
+            .phone-screen .app-logo { width: 90px; height: 90px; }
+            .phone-screen h3 { font-size: 20px; }
+            .phone-screen p { font-size: 12px; }
 
-            .phone-mockup {
-                width: 250px;
-                height: 500px;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .social-links {
-                justify-content: center;
-            }
-
-            .logo img {
-                width: 38px;
-                height: 38px;
-            }
+            .footer-content { grid-template-columns: 1fr; gap: 35px; text-align: center; }
+            .footer-brand .logo { justify-content: center; }
+            .social-links { justify-content: center; }
+            .footer-bottom { font-size: 13px; padding-top: 25px; }
 
             .whatsapp-float {
                 width: 55px;
@@ -955,11 +951,61 @@
                 bottom: 20px;
                 left: 20px;
             }
+        }
 
-            .store-btn {
-                width: 100%;
-                justify-content: center;
+        /* موبايل صغير (400px - 576px) */
+        @media (max-width: 576px) {
+            .hero h1 { font-size: 26px; }
+            .hero p { font-size: 14px; }
+            .section-header h2 { font-size: 23px; }
+            .section-header p { font-size: 14px; }
+            .download h2 { font-size: 21px; }
+            .download p { font-size: 13px; }
+            .contact-info h3 { font-size: 20px; }
+            .contact-container { gap: 30px; }
+            .whatsapp-btn { width: 100%; justify-content: center; }
+            .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+            .phone-mockup { width: 200px; height: 400px; }
+            .phone-screen .app-logo { width: 70px; height: 70px; }
+            .phone-screen h3 { font-size: 17px; }
+            .phone-screen p { font-size: 11px; }
+            .navbar .logo { font-size: 19px; }
+            .navbar .logo img { width: 36px; height: 36px; }
+            .feature-card h3 { font-size: 17px; }
+            .feature-card p { font-size: 13px; }
+        }
+
+        /* موبايل صغير جداً (حتى 400px) */
+        @media (max-width: 400px) {
+            .hero h1 { font-size: 22px; }
+            .hero p { font-size: 13px; }
+            .hero-badge { font-size: 11px; }
+            .section-header h2 { font-size: 20px; }
+            .download h2 { font-size: 18px; }
+            .phone-mockup { width: 170px; height: 340px; }
+            .phone-screen .app-logo { width: 60px; height: 60px; }
+            .navbar .logo { font-size: 17px; gap: 6px; }
+            .navbar .logo img { width: 32px; height: 32px; }
+            .contact-form { padding: 20px 15px; }
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                bottom: 15px;
+                left: 15px;
             }
+            .contact-item i { width: 40px; height: 40px; min-width: 40px; font-size: 16px; }
+        }
+
+        /* وضع أفقي للهواتف */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero { min-height: auto; padding: 90px 5% 40px; }
+            .phone-mockup { display: none; }
+        }
+
+        /* شاشات قابلة للطي */
+        @media (min-width: 600px) and (max-width: 700px) {
+            .features-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -1085,7 +1131,7 @@
         </div>
     </section>
 
-    <!-- قسم التواصل عبر واتساب -->
+    <!-- قسم التواصل -->
     <section class="section" id="contact">
         <div class="contact">
             <div class="section-header">
@@ -1216,7 +1262,6 @@
             navLinks.classList.toggle('active');
         });
 
-        // إغلاق القائمة عند النقر على رابط
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
@@ -1254,25 +1299,21 @@
             const phone = document.getElementById('waPhone').value.trim();
             const message = document.getElementById('waMessage').value.trim();
 
-            // رقم واتساب (بصيغة دولية بدون + أو مسافات)
             const whatsappNumber = '201211372060';
 
-            // تجهيز نص الرسالة
             let text = `مرحباً، أنا ${name}\n`;
             if (phone) {
                 text += `رقم هاتفي: ${phone}\n`;
             }
             text += `\n${message}`;
 
-            // فتح واتساب
             const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
             window.open(url, '_blank', 'noopener');
 
-            // إعادة تعيين النموذج
             e.target.reset();
         }
 
-        // تأثير ظهور العناصر عند التمرير
+        // تأثير ظهور العناصر
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
