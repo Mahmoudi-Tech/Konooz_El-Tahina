@@ -25,6 +25,8 @@
             --gray: #F5F5F5;
             --text: #333333;
             --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --whatsapp: #25D366;
+            --whatsapp-dark: #128C7E;
         }
 
         body {
@@ -42,6 +44,43 @@
             display: inline-block;
             font-family: 'Cairo', sans-serif;
             letter-spacing: 0.5px;
+        }
+
+        /* ===== لوجو التطبيق ===== */
+        .logo img,
+        .footer-brand .logo img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            border-radius: 10px;
+            transition: transform 0.4s;
+        }
+
+        .logo:hover img {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .footer-brand .logo img {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            padding: 5px;
+        }
+
+        /* لوجو داخل شاشة الموك-أب */
+        .phone-screen .app-logo {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(212,160,23,0.4);
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.05); }
         }
 
         /* ===== شريط التنقل ===== */
@@ -67,17 +106,6 @@
             font-size: 26px;
             font-weight: 900;
             color: var(--secondary);
-        }
-
-        .logo i {
-            color: var(--primary);
-            font-size: 32px;
-            animation: rotate 8s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .nav-links {
@@ -290,12 +318,6 @@
             overflow: hidden;
         }
 
-        .phone-screen i {
-            font-size: 80px;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-
         .phone-screen h3 {
             font-size: 24px;
             color: var(--secondary);
@@ -466,6 +488,7 @@
             gap: 15px;
             transition: all 0.3s;
             min-width: 200px;
+            position: relative;
         }
 
         .store-btn:hover {
@@ -492,6 +515,51 @@
             display: block;
             font-size: 18px;
             color: var(--dark);
+        }
+
+        /* زر App Store - قريباً */
+        .store-btn.coming-soon {
+            cursor: not-allowed;
+            opacity: 0.9;
+            pointer-events: none;
+            border: 2px dashed var(--primary);
+            background: #fffdf5;
+        }
+
+        .store-btn.coming-soon:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .store-btn.coming-soon i {
+            color: #999;
+        }
+
+        .store-btn.coming-soon small {
+            color: #aaa;
+        }
+
+        .store-btn.coming-soon strong {
+            color: #999;
+        }
+
+        .store-btn .soon-badge {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(212, 160, 23, 0.5);
+            animation: soonPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes soonPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         /* ===== قسم التواصل ===== */
@@ -538,6 +606,11 @@
             font-size: 20px;
         }
 
+        .contact-item .wa-icon {
+            background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
+            font-size: 24px;
+        }
+
         .contact-item div strong {
             display: block;
             color: var(--dark);
@@ -581,7 +654,7 @@
 
         .form-group input:focus,
         .form-group textarea:focus {
-            border-color: var(--primary);
+            border-color: var(--whatsapp);
         }
 
         .form-group textarea {
@@ -601,11 +674,82 @@
             cursor: pointer;
             transition: all 0.3s;
             font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(212, 160, 23, 0.4);
+        }
+
+        /* ===== أزرار واتساب ===== */
+        .whatsapp-btn {
+            background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
+        }
+
+        .whatsapp-btn i {
+            font-size: 22px;
+        }
+
+        .submit-btn.whatsapp {
+            background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
+        }
+
+        .submit-btn.whatsapp:hover {
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 32px;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
+            z-index: 999;
+            transition: all 0.3s;
+            animation: waPulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.7);
+        }
+
+        @keyframes waPulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
         /* ===== التذييل ===== */
@@ -656,6 +800,10 @@
         .social-links a:hover {
             background: var(--primary);
             transform: translateY(-5px);
+        }
+
+        .social-links a.wa:hover {
+            background: var(--whatsapp);
         }
 
         .footer-col h4 {
@@ -775,6 +923,24 @@
             .social-links {
                 justify-content: center;
             }
+
+            .logo img {
+                width: 38px;
+                height: 38px;
+            }
+
+            .whatsapp-float {
+                width: 55px;
+                height: 55px;
+                font-size: 28px;
+                bottom: 20px;
+                left: 20px;
+            }
+
+            .store-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -783,7 +949,7 @@
     <!-- شريط التنقل -->
     <nav class="navbar">
         <div class="logo">
-            <i class="fas fa-seedling"></i>
+            <img src="https://i.ibb.co/SXYPn7Wf/Logo.png" alt="لوجو كنوز الطحينة">
             <span>كنوز الطحينة</span>
         </div>
         <ul class="nav-links" id="navLinks">
@@ -817,7 +983,7 @@
         <div class="hero-image">
             <div class="phone-mockup">
                 <div class="phone-screen">
-                    <i class="fas fa-seedling"></i>
+                    <img src="https://i.ibb.co/SXYPn7Wf/Logo.png" alt="لوجو كنوز الطحينة" class="app-logo">
                     <h3>كنوز الطحينة</h3>
                     <p>أجود أنواع الطحينة الطبيعية</p>
                 </div>
@@ -880,15 +1046,16 @@
     <!-- قسم تحميل التطبيق -->
     <section class="download" id="download">
         <h2>حمّل تطبيق كنوز الطحينة الآن</h2>
-        <p>متوفر على متجر App Store و Google Play - تجربة تسوق فريدة في متناول يدك</p>
+        <p>متوفر على متجر Google Play - وقريباً على App Store</p>
         <div class="store-buttons">
-            <a href="#" class="store-btn">
+            <div class="store-btn coming-soon">
                 <i class="fab fa-apple"></i>
                 <div>
-                    <small>حمّل من</small>
+                    <small>قريباً على</small>
                     <strong>App Store</strong>
                 </div>
-            </a>
+                <span class="soon-badge">قريباً</span>
+            </div>
             <a href="#" class="store-btn">
                 <i class="fab fa-google-play"></i>
                 <div>
@@ -899,21 +1066,21 @@
         </div>
     </section>
 
-    <!-- قسم التواصل -->
+    <!-- قسم التواصل عبر واتساب -->
     <section class="section" id="contact">
         <div class="contact">
             <div class="section-header">
-                <h2>تواصل <span>معنا</span></h2>
-                <p>نحن هنا للإجابة على استفساراتك ومساعدتك</p>
+                <h2>تواصل <span>معنا</span> عبر واتساب</h2>
+                <p>نحن هنا للإجابة على استفساراتك عبر واتساب على مدار الساعة</p>
             </div>
             <div class="contact-container">
                 <div class="contact-info">
-                    <h3>دعنا نتحدث!</h3>
-                    <p>إذا كان لديك أي سؤال أو استفسار، لا تتردد في التواصل معنا. فريقنا جاهز لخدمتك على مدار الساعة.</p>
+                    <h3>دعنا نتحدث على واتساب! 💬</h3>
+                    <p>إذا كان لديك أي سؤال أو استفسار عن المنتجات أو الطلبات أو سياسة الاسترجاع، تواصل معنا مباشرة عبر واتساب وسنرد عليك في أسرع وقت.</p>
                     <div class="contact-item">
-                        <i class="fas fa-phone"></i>
+                        <i class="fab fa-whatsapp wa-icon"></i>
                         <div>
-                            <strong>اتصل بنا</strong>
+                            <strong>واتساب</strong>
                             <span class="phone-number" dir="ltr">+20 12 11372060</span>
                         </div>
                     </div>
@@ -931,40 +1098,61 @@
                             <span>الشرقية - الزقازيق - شارع الزراعة</span>
                         </div>
                     </div>
+                    <div style="margin-top: 30px;">
+                        <a href="https://wa.me/201211372060?text=مرحباً،%20أريد%20الاستفسار%20عن%20منتجات%20كنوز%20الطحينة"
+                           target="_blank"
+                           rel="noopener"
+                           class="whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            ابدأ محادثة واتساب الآن
+                        </a>
+                    </div>
                 </div>
-                <form class="contact-form" onsubmit="handleSubmit(event)">
+                <form class="contact-form" onsubmit="sendToWhatsApp(event)">
                     <div class="form-group">
                         <label>الاسم الكامل</label>
-                        <input type="text" placeholder="أدخل اسمك" required>
+                        <input type="text" id="waName" placeholder="أدخل اسمك" required>
                     </div>
                     <div class="form-group">
-                        <label>البريد الإلكتروني</label>
-                        <input type="email" placeholder="example@email.com" required>
+                        <label>رقم الهاتف (اختياري)</label>
+                        <input type="tel" id="waPhone" placeholder="01xxxxxxxxx" dir="ltr">
                     </div>
                     <div class="form-group">
-                        <label>الرسالة</label>
-                        <textarea placeholder="اكتب رسالتك هنا..." required></textarea>
+                        <label>رسالتك</label>
+                        <textarea id="waMessage" placeholder="اكتب رسالتك هنا..." required></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">إرسال الرسالة</button>
+                    <button type="submit" class="submit-btn whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        إرسال عبر واتساب
+                    </button>
                 </form>
             </div>
         </div>
     </section>
+
+    <!-- زر واتساب عائم -->
+    <a href="https://wa.me/201211372060?text=مرحباً،%20أريد%20الاستفسار%20عن%20منتجات%20كنوز%20الطحينة"
+       target="_blank"
+       rel="noopener"
+       class="whatsapp-float"
+       aria-label="تواصل معنا على واتساب">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <!-- التذييل -->
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="logo">
-                    <i class="fas fa-seedling"></i>
+                    <img src="https://i.ibb.co/SXYPn7Wf/Logo.png" alt="لوجو كنوز الطحينة">
                     <span>كنوز الطحينة</span>
                 </div>
                 <p>تطبيقك الأول لأجود أنواع الطحينة الطبيعية والمنتجات الصحية. جودة من قلب الطبيعة.</p>
                 <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="إنستجرام"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/201211372060" target="_blank" rel="noopener" class="wa" aria-label="واتساب"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
             <div class="footer-col">
@@ -1039,10 +1227,29 @@
             }
         });
 
-        // معالجة نموذج التواصل
-        function handleSubmit(e) {
+        // إرسال نموذج التواصل عبر واتساب
+        function sendToWhatsApp(e) {
             e.preventDefault();
-            alert('✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+
+            const name = document.getElementById('waName').value.trim();
+            const phone = document.getElementById('waPhone').value.trim();
+            const message = document.getElementById('waMessage').value.trim();
+
+            // رقم واتساب (بصيغة دولية بدون + أو مسافات)
+            const whatsappNumber = '201211372060';
+
+            // تجهيز نص الرسالة
+            let text = `مرحباً، أنا ${name}\n`;
+            if (phone) {
+                text += `رقم هاتفي: ${phone}\n`;
+            }
+            text += `\n${message}`;
+
+            // فتح واتساب
+            const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank', 'noopener');
+
+            // إعادة تعيين النموذج
             e.target.reset();
         }
 
