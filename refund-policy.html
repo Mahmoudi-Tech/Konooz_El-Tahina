@@ -23,6 +23,8 @@
             --light: #FFF9E6;
             --white: #FFFFFF;
             --text: #333333;
+            --whatsapp: #25D366;
+            --whatsapp-dark: #128C7E;
         }
 
         body {
@@ -39,6 +41,19 @@
             display: inline-block;
             font-family: 'Cairo', sans-serif;
             letter-spacing: 0.5px;
+        }
+
+        /* ===== لوجو التطبيق ===== */
+        .logo img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            border-radius: 10px;
+            transition: transform 0.4s;
+        }
+
+        .logo:hover img {
+            transform: scale(1.1) rotate(-5deg);
         }
 
         /* ===== شريط التنقل ===== */
@@ -64,11 +79,6 @@
             font-weight: 900;
             color: var(--secondary);
             text-decoration: none;
-        }
-
-        .logo i {
-            color: var(--primary);
-            font-size: 32px;
         }
 
         .back-btn {
@@ -413,10 +423,62 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
+        .contact-cta .cta-buttons a.wa {
+            background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
+            color: white;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+            flex-direction: row-reverse;
+        }
+
+        .contact-cta .cta-buttons a.wa:hover {
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.6);
+        }
+
+        .contact-cta .cta-buttons a.wa .phone-number {
+            direction: ltr;
+            unicode-bidi: isolate;
+            display: inline-block;
+            font-family: 'Cairo', sans-serif;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
         .contact-cta .cta-buttons a.secondary {
             background: transparent;
             color: white;
             border: 2px solid white;
+        }
+
+        /* ===== زر واتساب عائم ===== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 32px;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
+            z-index: 999;
+            transition: all 0.3s;
+            animation: waPulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.7);
+        }
+
+        @keyframes waPulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
         /* ===== التذييل ===== */
@@ -468,6 +530,19 @@
             .back-btn span {
                 display: none;
             }
+
+            .logo img {
+                width: 38px;
+                height: 38px;
+            }
+
+            .whatsapp-float {
+                width: 55px;
+                height: 55px;
+                font-size: 28px;
+                bottom: 20px;
+                left: 20px;
+            }
         }
     </style>
 </head>
@@ -476,7 +551,7 @@
     <!-- شريط التنقل -->
     <nav class="navbar">
         <a href="index.html" class="logo">
-            <i class="fas fa-seedling"></i>
+            <img src="https://i.ibb.co/SXYPn7Wf/Logo.png" alt="لوجو كنوز الطحينة">
             <span>كنوز الطحينة</span>
         </a>
         <a href="index.html" class="back-btn">
@@ -583,11 +658,14 @@
         <!-- تواصل -->
         <div class="contact-cta">
             <h3>هل لديك استفسار عن سياسة الاسترجاع؟</h3>
-            <p>فريق خدمة العملاء جاهز لمساعدتك على مدار الساعة</p>
+            <p>فريق خدمة العملاء جاهز لمساعدتك عبر واتساب على مدار الساعة</p>
             <div class="cta-buttons">
-                <a href="tel:+201211372060" class="phone-number" dir="ltr">
-                    <i class="fas fa-phone"></i>
-                    +20 12 11372060
+                <a href="https://wa.me/201211372060?text=مرحباً،%20أريد%20الاستفسار%20عن%20سياسة%20الاسترجاع"
+                   target="_blank"
+                   rel="noopener"
+                   class="wa">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>واتساب: <span class="phone-number" dir="ltr">+20 12 11372060</span></span>
                 </a>
                 <a href="mailto:test@test.com" class="secondary">
                     <i class="fas fa-envelope"></i>
@@ -597,6 +675,15 @@
         </div>
 
     </main>
+
+    <!-- زر واتساب عائم -->
+    <a href="https://wa.me/201211372060?text=مرحباً،%20أريد%20الاستفسار%20عن%20سياسة%20الاسترجاع"
+       target="_blank"
+       rel="noopener"
+       class="whatsapp-float"
+       aria-label="تواصل معنا على واتساب">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <!-- التذييل -->
     <footer>
