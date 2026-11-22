@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>كنوز الطحينة | تطبيق الطحينة الأول</title>
-
+    <title>كنوز الطحينة | تطبيق الطحينة الأول - تجربة 3D</title>
     <!-- أيقونة المتصفح (Favicon) -->
     <link rel="icon" type="image/png" href="https://i.ibb.co/SXYPn7Wf/Logo.png">
     <link rel="apple-touch-icon" href="https://i.ibb.co/SXYPn7Wf/Logo.png">
     <meta name="theme-color" content="#8B4513">
-
+    <!-- الخطوط والأيقونات -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * {
             margin: 0;
@@ -20,273 +20,247 @@
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
         }
-
         :root {
             --primary: #D4A017;
-            --primary-dark: #B8860B;
+            --primary-light: #FFD700;
+            --primary-dark: #9A7209;
             --secondary: #8B4513;
-            --dark: #2C1810;
+            --secondary-dark: #5A2B09;
+            --dark: #1E100A;
             --light: #FFF9E6;
             --white: #FFFFFF;
-            --gray: #F5F5F5;
-            --text: #333333;
-            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --text: #2C1810;
             --whatsapp: #25D366;
             --whatsapp-dark: #128C7E;
+            --perspective: 1200px;
         }
-
         html, body {
             max-width: 100%;
             overflow-x: hidden;
-        }
-
-        body {
-            background: var(--white);
+            background-color: var(--light);
             color: var(--text);
+            scroll-behavior: smooth;
         }
-
-        img {
-            max-width: 100%;
-            height: auto;
+        
+        /* خلفية 3D التفاعلية */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
         /* إصلاح عرض رقم الهاتف */
-        .phone-number,
-        .contact-item span[dir="ltr"],
-        a[href^="tel"] {
+        .phone-number, .contact-item span[dir="ltr"], a[href^="tel"] {
             direction: ltr;
             unicode-bidi: isolate;
             display: inline-block;
-            font-family: 'Cairo', sans-serif;
             letter-spacing: 0.5px;
         }
 
-        /* ===== لوجو التطبيق ===== */
-        .logo img,
-        .footer-brand .logo img {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
-            border-radius: 10px;
-            transition: transform 0.4s;
-        }
-
-        .logo:hover img {
-            transform: scale(1.1) rotate(-5deg);
-        }
-
-        .footer-brand .logo img {
-            width: 50px;
-            height: 50px;
-            background: rgba(255,255,255,0.1);
-            padding: 5px;
-        }
-
-        .phone-screen .app-logo {
-            width: 110px;
-            height: 110px;
-            object-fit: contain;
-            margin-bottom: 20px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(212,160,23,0.4);
-            animation: logoFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.05); }
-        }
-
-        /* ===== شريط التنقل ===== */
+        /* ===== شريط التنقل الزجاجي 3D ===== */
         .navbar {
             position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 5%;
+            top: 15px;
+            left: 5%;
+            right: 5%;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 12px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
-            transition: all 0.3s;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 160, 23, 0.3);
+            box-shadow: 0 15px 35px rgba(44, 24, 16, 0.1), 
+                        0 5px 15px rgba(212, 160, 23, 0.1),
+                        inset 0 2px 2px rgba(255, 255, 255, 0.9);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
         }
-
+        .navbar.scrolled {
+            top: 5px;
+            width: 94%;
+            left: 3%;
+            right: 3%;
+            padding: 10px 25px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 40px rgba(44, 24, 16, 0.15);
+        }
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 26px;
+            gap: 12px;
+            font-size: 24px;
             font-weight: 900;
             color: var(--secondary);
+            transform: translateZ(20px);
         }
-
+        .logo img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            border-radius: 12px;
+            filter: drop-shadow(0 5px 10px rgba(139, 69, 19, 0.3));
+            transition: transform 0.5s ease;
+        }
+        .logo:hover img {
+            transform: rotateY(180deg) scale(1.1);
+        }
         .nav-links {
             display: flex;
             gap: 30px;
             list-style: none;
         }
-
         .nav-links a {
             text-decoration: none;
             color: var(--dark);
-            font-weight: 600;
+            font-weight: 700;
             font-size: 16px;
             position: relative;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            padding: 5px 10px;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+            text-shadow: 0 5px 15px rgba(212, 160, 23, 0.4);
         }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            right: 0;
-            width: 0;
-            height: 3px;
-            background: var(--primary);
-            transition: width 0.3s;
-            border-radius: 3px;
-        }
-
-        .nav-links a:hover { color: var(--primary); }
-        .nav-links a:hover::after { width: 100%; }
-
-        .nav-btn {
+        /* ===== أزرار 3D الاحترافية ===== */
+        .btn-3d {
+            position: relative;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 12px 30px;
+            padding: 14px 32px;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
+            font-weight: 800;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             border: none;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(212, 160, 23, 0.3);
+            box-shadow: 0 6px 0 var(--secondary-dark),
+                        0 15px 25px rgba(212, 160, 23, 0.4),
+                        inset 0 2px 2px rgba(255, 255, 255, 0.4);
+            transition: all 0.15s ease;
+            transform-style: preserve-3d;
         }
-
-        .nav-btn:hover {
+        .btn-3d:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(212, 160, 23, 0.5);
+            box-shadow: 0 9px 0 var(--secondary-dark),
+                        0 20px 35px rgba(212, 160, 23, 0.5),
+                        inset 0 2px 2px rgba(255, 255, 255, 0.6);
+        }
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 var(--secondary-dark),
+                        0 5px 10px rgba(212, 160, 23, 0.3);
+        }
+        .btn-3d-secondary {
+            background: linear-gradient(135deg, #ffffff, #f0e6d2);
+            color: var(--secondary);
+            box-shadow: 0 6px 0 #cbb58b,
+                        0 15px 25px rgba(0, 0, 0, 0.1),
+                        inset 0 2px 2px #ffffff;
+        }
+        .btn-3d-secondary:hover {
+            box-shadow: 0 9px 0 #cbb58b,
+                        0 20px 30px rgba(0, 0, 0, 0.15);
+        }
+        .btn-3d-secondary:active {
+            box-shadow: 0 2px 0 #cbb58b;
         }
 
         .menu-toggle {
             display: none;
-            font-size: 28px;
-            color: var(--dark);
+            font-size: 26px;
+            color: var(--secondary);
             cursor: pointer;
-            background: none;
+            background: rgba(212, 160, 23, 0.15);
             border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
         }
 
-        /* ===== Hero ===== */
+        /* ===== القسم الرئيسي (Hero 3D) ===== */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 120px 5% 60px;
-            background: linear-gradient(135deg, #FFF9E6 0%, #FFE4B5 100%);
+            justify-content: space-between;
+            padding: 130px 5% 80px;
+            background: radial-gradient(circle at 70% 30%, #FFE4B5 0%, #FFF9E6 60%, #f7ebd2 100%);
             position: relative;
+            perspective: var(--perspective);
             overflow: hidden;
         }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(212,160,23,0.15) 0%, transparent 70%);
-            top: -200px;
-            left: -200px;
-            border-radius: 50%;
-        }
-
         .hero-content {
             flex: 1;
-            max-width: 600px;
+            max-width: 620px;
             z-index: 2;
+            transform-style: preserve-3d;
         }
-
         .hero-badge {
-            display: inline-block;
-            background: rgba(212, 160, 23, 0.15);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
             color: var(--secondary);
-            padding: 8px 20px;
+            padding: 10px 24px;
             border-radius: 50px;
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
             font-size: 14px;
-            border: 1px solid rgba(212, 160, 23, 0.3);
+            border: 1px solid rgba(212, 160, 23, 0.4);
+            box-shadow: 0 10px 25px rgba(212, 160, 23, 0.2);
+            transform: translateZ(30px);
+            animation: badgePulse 3s infinite ease-in-out;
         }
-
+        @keyframes badgePulse {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-5px) scale(1.03); }
+        }
         .hero h1 {
-            font-size: 56px;
+            font-size: 58px;
             font-weight: 900;
             color: var(--dark);
             line-height: 1.2;
             margin-bottom: 20px;
+            text-shadow: 0 10px 20px rgba(44, 24, 16, 0.1);
         }
-
         .hero h1 span {
-            color: var(--primary);
-            position: relative;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            filter: drop-shadow(0 5px 15px rgba(212, 160, 23, 0.3));
         }
-
         .hero p {
-            font-size: 18px;
-            color: #666;
+            font-size: 19px;
+            color: #554339;
             line-height: 1.8;
-            margin-bottom: 30px;
-            max-width: 500px;
+            margin-bottom: 35px;
+            max-width: 540px;
+            font-weight: 600;
         }
-
         .hero-buttons {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 16px;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(212, 160, 23, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(212, 160, 23, 0.5);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: var(--secondary);
-            padding: 16px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 16px;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            border: 2px solid var(--secondary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--secondary);
-            color: white;
-            transform: translateY(-3px);
-        }
-
+        /* ===== مجسم الهاتف ثلاثي الأبعاد الحقيقي (True 3D Phone) ===== */
         .hero-image {
             flex: 1;
             display: flex;
@@ -294,247 +268,348 @@
             align-items: center;
             position: relative;
             z-index: 2;
+            perspective: 1500px;
         }
-
-        .phone-mockup {
-            width: 300px;
-            height: 600px;
-            background: linear-gradient(145deg, #2C1810, #4a2c1a);
-            border-radius: 40px;
-            padding: 15px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        .scene-3d {
             position: relative;
-            animation: float 4s ease-in-out infinite;
+            width: 320px;
+            height: 620px;
+            transform-style: preserve-3d;
+            animation: autoFloat3D 6s ease-in-out infinite;
         }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        @keyframes autoFloat3D {
+            0%, 100% { transform: translateY(0px) rotateY(-12deg) rotateX(6deg); }
+            50% { transform: translateY(-20px) rotateY(8deg) rotateX(-4deg); }
         }
-
+        .phone-3d {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #3a2014, #1E100A);
+            border-radius: 45px;
+            padding: 14px;
+            position: relative;
+            transform-style: preserve-3d;
+            /* سُمك الهاتف 3D */
+            box-shadow: 
+                12px 12px 0 #150b07,
+                20px 30px 60px rgba(0, 0, 0, 0.45),
+                inset 0 0 10px rgba(212, 160, 23, 0.5);
+            border: 2px solid rgba(212, 160, 23, 0.4);
+        }
+        /* نوتش الكاميرا */
+        .phone-notch {
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%) translateZ(5px);
+            width: 110px;
+            height: 24px;
+            background: #1E100A;
+            border-radius: 20px;
+            z-index: 10;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+        }
         .phone-screen {
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, #FFF9E6, #FFE4B5);
-            border-radius: 30px;
+            background: linear-gradient(160deg, #FFF9E6 0%, #FFE4B5 50%, #f5d18c 100%);
+            border-radius: 34px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
             position: relative;
-            overflow: hidden;
+            transform-style: preserve-3d;
+            box-shadow: inset 0 0 30px rgba(139, 69, 19, 0.2);
         }
-
+        /* عناصر تخرج من شاشة الهاتف 3D */
+        .phone-screen .app-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            border-radius: 28px;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 20px 40px rgba(139, 69, 19, 0.35);
+            transform: translateZ(60px);
+            transition: transform 0.3s;
+        }
         .phone-screen h3 {
-            font-size: 24px;
+            font-size: 26px;
+            font-weight: 900;
             color: var(--secondary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            transform: translateZ(45px);
+            text-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
         .phone-screen p {
             font-size: 14px;
-            color: #888;
+            color: #6e5544;
+            font-weight: 600;
+            transform: translateZ(35px);
+            margin-bottom: 25px;
+        }
+        .phone-ui-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 18px;
+            width: 90%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+            transform: translateZ(50px);
+            margin-top: 10px;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .phone-ui-card i {
+            background: var(--primary);
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .phone-ui-card div {
+            text-align: right;
+            font-size: 12px;
+        }
+        .phone-ui-card strong {
+            display: block;
+            color: var(--dark);
+            font-size: 14px;
         }
 
-        /* ===== Sections ===== */
-        .section { padding: 100px 5%; }
+        /* عناصر عائمة حول الهاتف 3D */
+        .floating-badge-3d {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(44, 24, 16, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--dark);
+            border: 2px solid var(--primary);
+            transform: translateZ(85px);
+            z-index: 20;
+            white-space: nowrap;
+        }
+        .floating-badge-3d i {
+            color: var(--primary);
+            font-size: 20px;
+        }
+        .fb-1 {
+            top: 12%;
+            right: -45px;
+            animation: floatBadge1 4s ease-in-out infinite;
+        }
+        .fb-2 {
+            bottom: 18%;
+            left: -45px;
+            animation: floatBadge2 5s ease-in-out infinite;
+        }
+        @keyframes floatBadge1 {
+            0%, 100% { transform: translateZ(85px) translateY(0); }
+            50% { transform: translateZ(95px) translateY(-12px); }
+        }
+        @keyframes floatBadge2 {
+            0%, 100% { transform: translateZ(75px) translateY(0); }
+            50% { transform: translateZ(90px) translateY(12px); }
+        }
 
+        /* ===== الأقسام العامة ===== */
+        .section {
+            padding: 100px 5%;
+            position: relative;
+            z-index: 2;
+            perspective: var(--perspective);
+        }
         .section-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 70px;
+            transform-style: preserve-3d;
         }
-
         .section-header h2 {
-            font-size: 42px;
+            font-size: 44px;
             font-weight: 900;
             color: var(--dark);
             margin-bottom: 15px;
+            text-shadow: 0 8px 20px rgba(0,0,0,0.06);
         }
-
-        .section-header h2 span { color: var(--primary); }
-
+        .section-header h2 span {
+            color: var(--primary);
+            position: relative;
+        }
         .section-header p {
             font-size: 18px;
-            color: #777;
+            color: #66554b;
             max-width: 600px;
             margin: 0 auto;
+            font-weight: 600;
         }
 
+        /* ===== كروت المميزات 3D (Pop-out Tilt Cards) ===== */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+            max-width: 1250px;
             margin: 0 auto;
+            perspective: 1200px;
         }
-
         .feature-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 45px 30px;
+            border-radius: 30px;
             text-align: center;
-            transition: all 0.4s;
-            border: 1px solid #f0f0f0;
+            border: 1px solid rgba(212, 160, 23, 0.25);
+            box-shadow: 0 20px 40px rgba(44, 24, 16, 0.08),
+                        0 5px 0 rgba(212, 160, 23, 0.3);
+            transform-style: preserve-3d;
             position: relative;
-            overflow: hidden;
+            cursor: pointer;
         }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transition: transform 0.4s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-        }
-
-        .feature-card:hover::before { transform: scaleX(1); }
-
         .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), rgba(139, 69, 19, 0.15));
-            border-radius: 20px;
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0 auto 25px;
-            font-size: 36px;
-            color: var(--primary);
-            transition: all 0.4s;
-        }
-
-        .feature-card:hover .feature-icon {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-size: 38px;
             color: white;
-            transform: rotateY(360deg);
+            box-shadow: 0 15px 30px rgba(212, 160, 23, 0.4),
+                        inset 0 3px 5px rgba(255, 255, 255, 0.4);
+            /* بروز الأيقونة في الفضاء 3D */
+            transform: translateZ(50px);
+            transition: all 0.4s ease;
         }
-
+        .feature-card:hover .feature-icon {
+            transform: translateZ(70px) scale(1.1) rotateZ(-5deg);
+            box-shadow: 0 25px 40px rgba(212, 160, 23, 0.6);
+        }
         .feature-card h3 {
-            font-size: 22px;
+            font-size: 24px;
             color: var(--dark);
             margin-bottom: 15px;
-            font-weight: 700;
+            font-weight: 800;
+            transform: translateZ(35px);
         }
-
         .feature-card p {
-            color: #777;
+            color: #66554b;
             line-height: 1.8;
             font-size: 15px;
+            font-weight: 600;
+            transform: translateZ(25px);
         }
 
-        /* ===== Download ===== */
+        /* ===== قسم التحميل 3D ===== */
+        .download-wrapper {
+            padding: 40px 5%;
+            perspective: 1500px;
+            position: relative;
+            z-index: 2;
+        }
         .download {
+            max-width: 1250px;
+            margin: 0 auto;
             background: linear-gradient(135deg, var(--secondary), var(--dark));
             color: white;
             text-align: center;
             border-radius: 40px;
-            margin: 60px 5%;
-            padding: 80px 30px;
+            padding: 80px 35px;
             position: relative;
-            overflow: hidden;
+            transform-style: preserve-3d;
+            box-shadow: 0 30px 60px rgba(30, 16, 10, 0.4),
+                        0 10px 0 #120905,
+                        inset 0 2px 5px rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(212, 160, 23, 0.3);
         }
-
-        .download::before {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(212,160,23,0.3) 0%, transparent 70%);
-            top: -100px;
-            right: -100px;
-            border-radius: 50%;
-        }
-
         .download h2 {
-            font-size: 42px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
+            font-size: 44px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            transform: translateZ(45px);
+            text-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
-
         .download p {
-            font-size: 18px;
+            font-size: 19px;
             opacity: 0.9;
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 2;
+            margin-bottom: 45px;
+            transform: translateZ(30px);
         }
-
         .store-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             flex-wrap: wrap;
-            position: relative;
-            z-index: 2;
+            transform: translateZ(55px);
         }
-
         .store-btn {
             background: white;
             color: var(--dark);
-            padding: 15px 30px;
-            border-radius: 15px;
+            padding: 16px 35px;
+            border-radius: 20px;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 15px;
-            transition: all 0.3s;
-            min-width: 200px;
+            min-width: 220px;
             position: relative;
+            box-shadow: 0 8px 0 #cbb58b,
+                        0 20px 35px rgba(0,0,0,0.35);
+            transition: all 0.2s ease;
         }
-
         .store-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 13px 0 #cbb58b,
+                        0 25px 45px rgba(0,0,0,0.45);
         }
-
+        .store-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 3px 0 #cbb58b;
+        }
         .store-btn i {
-            font-size: 36px;
+            font-size: 38px;
             color: var(--primary);
         }
-
         .store-btn div { text-align: right; }
-
         .store-btn small {
             display: block;
             font-size: 12px;
-            color: #888;
+            color: #777;
+            font-weight: 700;
         }
-
         .store-btn strong {
             display: block;
-            font-size: 18px;
+            font-size: 19px;
             color: var(--dark);
+            font-weight: 900;
         }
-
         .store-btn.coming-soon {
             cursor: not-allowed;
-            opacity: 0.9;
-            pointer-events: none;
-            border: 2px dashed var(--primary);
-            background: #fffdf5;
+            opacity: 0.85;
+            background: #f5efe0;
+            box-shadow: 0 8px 0 #9e8f73;
         }
-
         .store-btn.coming-soon:hover {
             transform: none;
-            box-shadow: none;
         }
-
-        .store-btn.coming-soon i { color: #999; }
-        .store-btn.coming-soon small { color: #aaa; }
-        .store-btn.coming-soon strong { color: #999; }
-
         .store-btn .soon-badge {
             position: absolute;
             top: -12px;
@@ -542,477 +617,354 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             font-size: 12px;
-            font-weight: 700;
-            padding: 4px 14px;
+            font-weight: 800;
+            padding: 4px 15px;
             border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(212, 160, 23, 0.5);
-            animation: soonPulse 1.5s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        @keyframes soonPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        /* ===== Contact ===== */
+        /* ===== قسم التواصل 3D ===== */
         .contact {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 0 auto;
         }
-
         .contact-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 50px;
             align-items: center;
         }
-
         .contact-info h3 {
-            font-size: 32px;
+            font-size: 34px;
+            font-weight: 900;
             color: var(--dark);
             margin-bottom: 20px;
         }
-
         .contact-info p {
-            color: #777;
+            color: #66554b;
             line-height: 1.8;
             margin-bottom: 30px;
+            font-weight: 600;
         }
-
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 18px;
+            margin-bottom: 22px;
+            background: rgba(255,255,255,0.7);
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid rgba(212, 160, 23, 0.2);
+            transition: transform 0.3s ease;
         }
-
+        .contact-item:hover {
+            transform: translateX(-8px) scale(1.02);
+            background: white;
+            box-shadow: 0 15px 30px rgba(212, 160, 23, 0.15);
+        }
         .contact-item i {
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
+            width: 55px;
+            height: 55px;
+            min-width: 55px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            border-radius: 15px;
+            border-radius: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 20px;
+            font-size: 22px;
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
         }
-
         .contact-item .wa-icon {
             background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
-            font-size: 24px;
+            font-size: 26px;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
         }
-
         .contact-item div strong {
             display: block;
             color: var(--dark);
-            margin-bottom: 3px;
+            font-size: 16px;
+            margin-bottom: 2px;
         }
-
         .contact-item div span {
-            color: #777;
+            color: #66554b;
             font-size: 14px;
-            word-break: break-word;
+            font-weight: 600;
         }
 
+        /* فورم التواصل 3D */
         .contact-form {
-            background: white;
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(15px);
+            padding: 45px;
+            border-radius: 35px;
+            box-shadow: 0 25px 50px rgba(44, 24, 16, 0.12),
+                        0 8px 0 rgba(212, 160, 23, 0.3);
+            border: 1px solid rgba(212, 160, 23, 0.3);
+            transform-style: preserve-3d;
         }
-
-        .form-group { margin-bottom: 20px; }
-
+        .form-group {
+            margin-bottom: 22px;
+            transform: translateZ(20px);
+        }
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: 800;
             color: var(--dark);
         }
-
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            font-family: inherit;
+            padding: 16px;
+            background: #fdfaf2;
+            border: 2px solid #e6dec8;
+            border-radius: 16px;
             font-size: 15px;
-            transition: border-color 0.3s;
+            font-weight: 600;
+            transition: all 0.3s ease;
             outline: none;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.04);
         }
-
         .form-group input:focus,
         .form-group textarea:focus {
             border-color: var(--whatsapp);
+            background: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.15);
         }
-
         .form-group textarea {
             resize: vertical;
             min-height: 120px;
         }
 
-        .submit-btn {
-            width: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        .whatsapp-btn-3d {
+            background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
             color: white;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
+            padding: 16px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
             font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(212, 160, 23, 0.4);
-        }
-
-        .whatsapp-btn {
-            background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
-            color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 16px;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
             border: none;
             cursor: pointer;
-            font-family: inherit;
+            box-shadow: 0 6px 0 #0b5c52,
+                        0 15px 30px rgba(37, 211, 102, 0.4);
+            transition: all 0.15s ease;
+            transform: translateZ(30px);
         }
-
-        .whatsapp-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
+        .whatsapp-btn-3d:hover {
+            transform: translateZ(30px) translateY(-3px);
+            box-shadow: 0 9px 0 #0b5c52,
+                        0 20px 35px rgba(37, 211, 102, 0.5);
         }
-
-        .whatsapp-btn i { font-size: 22px; }
-
-        .submit-btn.whatsapp {
-            background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
+        .whatsapp-btn-3d:active {
+            transform: translateZ(30px) translateY(4px);
+            box-shadow: 0 2px 0 #0b5c52;
         }
+        .w-100 { width: 100%; border-radius: 16px; }
 
-        .submit-btn.whatsapp:hover {
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-        }
-
+        /* زر واتساب العائم 3D */
         .whatsapp-float {
             position: fixed;
             bottom: 30px;
             left: 30px;
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-dark));
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
-            font-size: 32px;
+            font-size: 34px;
             text-decoration: none;
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
+            box-shadow: 0 6px 0 #0b5c52,
+                        0 15px 30px rgba(37, 211, 102, 0.5);
             z-index: 999;
             transition: all 0.3s;
             animation: waPulse 2s infinite;
         }
-
         .whatsapp-float:hover {
-            transform: scale(1.1) translateY(-5px);
-            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.7);
+            transform: scale(1.1) translateY(-5px) rotate(10deg);
         }
-
         @keyframes waPulse {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+            0% { box-shadow: 0 6px 0 #0b5c52, 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 6px 0 #0b5c52, 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 6px 0 #0b5c52, 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
-        /* ===== Footer ===== */
+        /* ===== التذييل (Footer) ===== */
         footer {
             background: var(--dark);
             color: white;
-            padding: 60px 5% 30px;
+            padding: 70px 5% 30px;
+            position: relative;
+            z-index: 2;
+            border-top: 5px solid var(--primary);
         }
-
         .footer-content {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 40px;
             margin-bottom: 40px;
         }
-
         .footer-brand .logo {
             color: white;
             margin-bottom: 20px;
         }
-
-        .footer-brand p {
-            color: #aaa;
-            line-height: 1.8;
-            margin-bottom: 20px;
+        .footer-brand .logo img {
+            background: rgba(255,255,255,0.1);
+            padding: 5px;
         }
-
+        .footer-brand p {
+            color: #cbb58b;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
         .social-links {
             display: flex;
             gap: 12px;
         }
-
         .social-links a {
             width: 45px;
             height: 45px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 14px;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
             text-decoration: none;
             transition: all 0.3s;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.4);
         }
-
         .social-links a:hover {
             background: var(--primary);
             transform: translateY(-5px);
+            box-shadow: 0 9px 0 var(--primary-dark);
         }
-
-        .social-links a.wa:hover { background: var(--whatsapp); }
-
+        .social-links a.wa:hover {
+            background: var(--whatsapp);
+            box-shadow: 0 9px 0 var(--whatsapp-dark);
+        }
         .footer-col h4 {
-            font-size: 18px;
+            font-size: 19px;
+            font-weight: 800;
             margin-bottom: 20px;
             color: var(--primary);
         }
-
         .footer-col ul { list-style: none; }
-
         .footer-col ul li { margin-bottom: 12px; }
-
         .footer-col ul li a {
-            color: #aaa;
+            color: #cbb58b;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            display: inline-block;
         }
-
         .footer-col ul li a:hover {
             color: var(--primary);
-            padding-right: 5px;
+            transform: translateX(-6px);
         }
-
         .footer-bottom {
             text-align: center;
             padding-top: 30px;
             border-top: 1px solid rgba(255,255,255,0.1);
-            color: #888;
+            color: #998877;
             font-size: 14px;
         }
-
         .footer-bottom a {
             color: var(--primary);
             text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
-            border-bottom: 1px dashed transparent;
+            font-weight: 800;
         }
 
-        .footer-bottom a:hover {
-            color: var(--primary-dark);
-            border-bottom-color: var(--primary);
-        }
-
-        /* ===== تحسينات التجاوب الشاملة ===== */
-
-        /* شاشات كبيرة جداً (4K) */
-        @media (min-width: 1600px) {
-            .hero h1 { font-size: 64px; }
-            .section-header h2 { font-size: 48px; }
-            .features-grid, .footer-content, .contact { max-width: 1400px; }
-        }
-
-        /* تابلت كبير (992px - 1200px) */
-        @media (max-width: 1200px) {
-            .navbar { padding: 15px 4%; }
-            .section { padding: 80px 4%; }
-            .hero { padding: 110px 4% 50px; }
-            .download { margin: 50px 4%; padding: 70px 25px; }
-        }
-
-        /* تابلت (768px - 992px) */
+        /* ===== التجاوب الكامل مع جميع الشاشات (Responsive 3D) ===== */
         @media (max-width: 992px) {
             .hero {
                 flex-direction: column;
                 text-align: center;
-                padding-top: 100px;
+                padding-top: 120px;
+                gap: 50px;
             }
-
-            .hero-content { margin-bottom: 50px; }
-            .hero h1 { font-size: 38px; }
+            .hero h1 { font-size: 40px; }
             .hero p { margin: 0 auto 30px; }
             .hero-buttons { justify-content: center; }
-            .section-header h2 { font-size: 34px; }
-            .section-header p { font-size: 16px; }
-            .download h2 { font-size: 32px; }
-            .download p { font-size: 16px; }
             .contact-container { grid-template-columns: 1fr; }
-            .contact-info h3 { font-size: 26px; }
-            .footer-content { grid-template-columns: 1fr 1fr; gap: 30px; }
-            .store-btn { min-width: 180px; padding: 14px 25px; }
-            .store-btn i { font-size: 30px; }
-            .phone-mockup { width: 270px; height: 540px; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+            .scene-3d { width: 290px; height: 570px; }
+            .fb-1 { right: -20px; }
+            .fb-2 { left: -20px; }
         }
 
-        /* موبايل كبير (576px - 768px) */
         @media (max-width: 768px) {
-            .navbar { padding: 12px 4%; }
-            .navbar .logo { font-size: 22px; }
-            .navbar .logo img { width: 40px; height: 40px; }
-
+            .navbar {
+                top: 10px;
+                padding: 10px 20px;
+            }
             .nav-links {
                 position: fixed;
-                top: 65px;
-                right: -100%;
-                width: 100%;
-                height: calc(100vh - 65px);
-                background: white;
+                top: 75px;
+                right: -110%;
+                width: 90%;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
                 flex-direction: column;
-                padding: 40px;
-                transition: right 0.3s;
-                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+                padding: 30px;
+                border-radius: 25px;
+                transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+                border: 2px solid var(--primary);
             }
-
-            .nav-links.active { right: 0; }
+            .nav-links.active { right: 5%; }
             .menu-toggle { display: block; }
-            .nav-btn { display: none; }
+            .navbar .btn-3d { display: none; }
+            
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .section { padding: 70px 4%; }
+            .section-header h2 { font-size: 30px; }
+            
+            .scene-3d { width: 260px; height: 510px; }
+            .floating-badge-3d { font-size: 12px; padding: 8px 14px; }
+            .fb-1 { right: -10px; top: 8%; }
+            .fb-2 { left: -10px; bottom: 12%; }
+            
+            .download { padding: 55px 20px; border-radius: 30px; }
+            .download h2 { font-size: 26px; }
+            .store-btn { width: 100%; justify-content: center; }
+            
+            .contact-form { padding: 30px 20px; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+            .footer-brand .logo, .social-links { justify-content: center; }
+        }
 
-            .hero { padding: 95px 4% 40px; min-height: auto; }
-            .hero h1 { font-size: 30px; line-height: 1.3; }
-            .hero p { font-size: 15px; }
-            .hero-badge { font-size: 12px; padding: 6px 15px; }
-            .btn-primary, .btn-secondary { padding: 13px 28px; font-size: 14px; }
-
-            .section { padding: 60px 4%; }
-            .section-header { margin-bottom: 40px; }
-            .section-header h2 { font-size: 26px; }
-            .section-header p { font-size: 15px; }
-            .features-grid { gap: 20px; }
-            .feature-card { padding: 30px 20px; }
-            .feature-card h3 { font-size: 19px; }
-            .feature-card p { font-size: 14px; }
-            .feature-icon { width: 65px; height: 65px; font-size: 28px; margin-bottom: 18px; }
-
-            .download { margin: 40px 4%; padding: 55px 20px; border-radius: 30px; }
-            .download h2 { font-size: 24px; }
-            .download p { font-size: 14px; margin-bottom: 30px; }
-            .store-buttons { gap: 15px; }
-            .store-btn { padding: 12px 20px; min-width: 100%; justify-content: center; }
-            .store-btn strong { font-size: 16px; }
-            .store-btn small { font-size: 11px; }
-            .store-btn i { font-size: 26px; }
-
-            .contact-info h3 { font-size: 22px; }
-            .contact-info p { font-size: 14px; }
-            .contact-item i { width: 45px; height: 45px; min-width: 45px; font-size: 18px; }
-            .contact-item div strong { font-size: 15px; }
-            .contact-item div span { font-size: 13px; }
-            .contact-form { padding: 25px 20px; }
-            .form-group input, .form-group textarea { padding: 12px; font-size: 14px; }
-            .submit-btn { padding: 14px; font-size: 15px; }
-            .whatsapp-btn { padding: 13px 25px; font-size: 14px; }
-
-            .phone-mockup { width: 240px; height: 480px; }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 27px; }
+            .btn-3d, .whatsapp-btn-3d { width: 100%; justify-content: center; }
+            .scene-3d { width: 235px; height: 460px; }
             .phone-screen .app-logo { width: 90px; height: 90px; }
             .phone-screen h3 { font-size: 20px; }
-            .phone-screen p { font-size: 12px; }
-
-            .footer-content { grid-template-columns: 1fr; gap: 35px; text-align: center; }
-            .footer-brand .logo { justify-content: center; }
-            .social-links { justify-content: center; }
-            .footer-bottom { font-size: 13px; padding-top: 25px; }
-
-            .whatsapp-float {
-                width: 55px;
-                height: 55px;
-                font-size: 28px;
-                bottom: 20px;
-                left: 20px;
-            }
-        }
-
-        /* موبايل صغير (400px - 576px) */
-        @media (max-width: 576px) {
-            .hero h1 { font-size: 26px; }
-            .hero p { font-size: 14px; }
-            .section-header h2 { font-size: 23px; }
-            .section-header p { font-size: 14px; }
-            .download h2 { font-size: 21px; }
-            .download p { font-size: 13px; }
-            .contact-info h3 { font-size: 20px; }
-            .contact-container { gap: 30px; }
-            .whatsapp-btn { width: 100%; justify-content: center; }
-            .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
-            .phone-mockup { width: 200px; height: 400px; }
-            .phone-screen .app-logo { width: 70px; height: 70px; }
-            .phone-screen h3 { font-size: 17px; }
-            .phone-screen p { font-size: 11px; }
-            .navbar .logo { font-size: 19px; }
-            .navbar .logo img { width: 36px; height: 36px; }
-            .feature-card h3 { font-size: 17px; }
-            .feature-card p { font-size: 13px; }
-        }
-
-        /* موبايل صغير جداً (حتى 400px) */
-        @media (max-width: 400px) {
-            .hero h1 { font-size: 22px; }
-            .hero p { font-size: 13px; }
-            .hero-badge { font-size: 11px; }
-            .section-header h2 { font-size: 20px; }
-            .download h2 { font-size: 18px; }
-            .phone-mockup { width: 170px; height: 340px; }
-            .phone-screen .app-logo { width: 60px; height: 60px; }
-            .navbar .logo { font-size: 17px; gap: 6px; }
-            .navbar .logo img { width: 32px; height: 32px; }
-            .contact-form { padding: 20px 15px; }
-            .whatsapp-float {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-                bottom: 15px;
-                left: 15px;
-            }
-            .contact-item i { width: 40px; height: 40px; min-width: 40px; font-size: 16px; }
-        }
-
-        /* وضع أفقي للهواتف */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .hero { min-height: auto; padding: 90px 5% 40px; }
-            .phone-mockup { display: none; }
-        }
-
-        /* شاشات قابلة للطي */
-        @media (min-width: 600px) and (max-width: 700px) {
-            .features-grid { grid-template-columns: 1fr 1fr; }
+            /* تقليل البروز في الشاشات الصغيرة جداً لمنع الخروج عن الإطار */
+            .feature-icon { transform: translateZ(30px); }
+            .whatsapp-float { width: 55px; height: 55px; font-size: 28px; bottom: 20px; left: 20px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- خلفية الجزيئات الذهبية التفاعلية 3D -->
+    <canvas id="bg-canvas"></canvas>
+
     <!-- شريط التنقل -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="logo">
             <img src="https://i.ibb.co/SXYPn7Wf/Logo.png" alt="لوجو كنوز الطحينة">
             <span>كنوز الطحينة</span>
@@ -1020,85 +972,117 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="#home">الرئيسية</a></li>
             <li><a href="#features">المميزات</a></li>
+            <li><a href="#download">التطبيق</a></li>
             <li><a href="#contact">تواصل معنا</a></li>
         </ul>
-        <a href="#download" class="nav-btn">حمّل التطبيق</a>
-        <button class="menu-toggle" id="menuToggle">
+        <a href="#download" class="btn-3d" style="padding: 10px 24px; font-size: 14px;">حمّل التطبيق</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="القائمة">
             <i class="fas fa-bars"></i>
         </button>
     </nav>
 
-    <!-- القسم الرئيسي -->
+    <!-- القسم الرئيسي 3D -->
     <section class="hero" id="home">
         <div class="hero-content">
             <span class="hero-badge">✨ التطبيق الأول من نوعه في العالم العربي</span>
             <h1>اكتشف <span>كنوز الطحينة</span> في كل وجبة</h1>
             <p>تطبيق كنوز الطحينة يقدم لك أجود أنواع الطحينة الطبيعية 100%، مع وصفات حصرية وأطباق شهية تناسب كل الأذواق. جودة لا مثيل لها من قلب الطبيعة إلى مائدتك.</p>
             <div class="hero-buttons">
-                <a href="#download" class="btn-primary">
+                <a href="#download" class="btn-3d">
                     <i class="fas fa-download"></i>
                     حمّل التطبيق الآن
                 </a>
-                <a href="#features" class="btn-secondary">
-                    <i class="fas fa-star"></i>
-                    تعرف على المميزات
+                <a href="#features" class="btn-3d btn-3d-secondary">
+                    <i class="fas fa-cube"></i>
+                    استكشف المميزات
                 </a>
             </div>
         </div>
+
+        <!-- مجسم الهاتف ثلاثي الأبعاد التفاعلي -->
         <div class="hero-image">
-            <div class="phone-mockup">
-                <div class="phone-screen">
-                    <img src="https://i.ibb.co/SXYPn7Wf/Logo.png" alt="لوجو كنوز الطحينة" class="app-logo">
-                    <h3>كنوز الطحينة</h3>
-                    <p>أجود أنواع الطحينة الطبيعية</p>
+            <div class="scene-3d" data-tilt data-tilt-max="18" data-tilt-speed="400" data-tilt-perspective="1200" data-tilt-gyroscope="true">
+                <!-- شارات عائمة في الفضاء 3D -->
+                <div class="floating-badge-3d fb-1">
+                    <i class="fas fa-leaf"></i>
+                    <span>سمسم طبيعي 100%</span>
+                </div>
+                <div class="floating-badge-3d fb-2">
+                    <i class="fas fa-bolt"></i>
+                    <span>توصيل سريع لباب البيت</span>
+                </div>
+
+                <div class="phone-3d">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <img src="https://i.ibb.co/SXYPn7Wf/Logo.png" alt="لوجو كنوز الطحينة" class="app-logo">
+                        <h3>كنوز الطحينة</h3>
+                        <p>أجود أنواع الطحينة الطبيعية</p>
+                        
+                        <!-- بطاقات بارزة من داخل الشاشة -->
+                        <div class="phone-ui-card">
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <strong>جودة ملكية فاخرة</strong>
+                                <span>من أجود محاصيل السمسم</span>
+                            </div>
+                        </div>
+                        <div class="phone-ui-card">
+                            <i class="fas fa-gift"></i>
+                            <div>
+                                <strong>عروض يومية حصرية</strong>
+                                <span>اطلب الآن بضغطة زر</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- قسم المميزات -->
+    <!-- قسم المميزات 3D -->
     <section class="section" id="features">
         <div class="section-header">
             <h2>لماذا <span>كنوز الطحينة</span>؟</h2>
             <p>نقدم لك تجربة فريدة ومميزة مع أفضل ما في عالم الطحينة</p>
         </div>
         <div class="features-grid">
-            <div class="feature-card">
+            <div class="feature-card" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.3" data-tilt-gyroscope="true">
                 <div class="feature-icon">
                     <i class="fas fa-leaf"></i>
                 </div>
                 <h3>100% طبيعي</h3>
                 <p>طحينة طبيعية خالية من المواد الحافظة والإضافات الصناعية، من قلب الطبيعة مباشرة.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.3" data-tilt-gyroscope="true">
                 <div class="feature-icon">
                     <i class="fas fa-truck-fast"></i>
                 </div>
                 <h3>توصيل سريع</h3>
                 <p>خدمة توصيل سريعة إلى باب منزلك في جميع أنحاء الجمهورية خلال 24 ساعة.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.3" data-tilt-gyroscope="true">
                 <div class="feature-icon">
                     <i class="fas fa-award"></i>
                 </div>
                 <h3>جودة مضمونة</h3>
                 <p>منتجاتنا حاصلة على شهادات الجودة العالمية، وضمان استرداد كامل.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.3" data-tilt-gyroscope="true">
                 <div class="feature-icon">
                     <i class="fas fa-mobile-screen"></i>
                 </div>
                 <h3>تطبيق سهل</h3>
                 <p>واجهة استخدام بسيطة وممتعة، اطلب منتجاتك واستمتع بالوصفات الحصرية.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.3" data-tilt-gyroscope="true">
                 <div class="feature-icon">
                     <i class="fas fa-utensils"></i>
                 </div>
                 <h3>وصفات حصرية</h3>
                 <p>مئات الوصفات الشهية باستخدام الطحينة، من أطباق رئيسية إلى حلويات.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.3" data-tilt-gyroscope="true">
                 <div class="feature-icon">
                     <i class="fas fa-gift"></i>
                 </div>
@@ -1108,30 +1092,32 @@
         </div>
     </section>
 
-    <!-- قسم تحميل التطبيق -->
-    <section class="download" id="download">
-        <h2>حمّل تطبيق كنوز الطحينة الآن</h2>
-        <p>متوفر على متجر Google Play - وقريباً على App Store</p>
-        <div class="store-buttons">
-            <div class="store-btn coming-soon">
-                <i class="fab fa-apple"></i>
-                <div>
-                    <small>قريباً على</small>
-                    <strong>App Store</strong>
+    <!-- قسم تحميل التطبيق 3D -->
+    <div class="download-wrapper" id="download">
+        <section class="download" data-tilt data-tilt-max="6" data-tilt-speed="600" data-tilt-perspective="1800">
+            <h2>حمّل تطبيق كنوز الطحينة الآن</h2>
+            <p>متوفر للتحميل المباشر للأندرويد - وقريباً على App Store</p>
+            <div class="store-buttons">
+                <div class="store-btn coming-soon">
+                    <i class="fab fa-apple"></i>
+                    <div>
+                        <small>قريباً على</small>
+                        <strong>App Store</strong>
+                    </div>
+                    <span class="soon-badge">قريباً</span>
                 </div>
-                <span class="soon-badge">قريباً</span>
+                <a href="https://github.com/Mahmoudi-Tech/Konooz_El-Tahina/releases/download/v1.1.7/Konooz_El-Tahina-V1.1.7.apk" class="store-btn">
+                    <i class="fab fa-google-play"></i>
+                    <div>
+                        <small>حمّل الآن (APK)</small>
+                        <strong>Android App</strong>
+                    </div>
+                </a>
             </div>
-            <a href="https://github.com/Mahmoudi-Tech/Konooz_El-Tahina/releases/download/v1.1.7/Konooz_El-Tahina-V1.1.7.apk" class="store-btn">
-                <i class="fab fa-google-play"></i>
-                <div>
-                    <small>حمّل من</small>
-                    <strong>Google Play</strong>
-                </div>
-            </a>
-        </div>
-    </section>
+        </section>
+    </div>
 
-    <!-- قسم التواصل -->
+    <!-- قسم التواصل 3D -->
     <section class="section" id="contact">
         <div class="contact">
             <div class="section-header">
@@ -1167,13 +1153,14 @@
                         <a href="https://wa.me/201211372060?text=مرحباً،%20أريد%20الاستفسار%20عن%20منتجات%20كنوز%20الطحينة"
                            target="_blank"
                            rel="noopener"
-                           class="whatsapp-btn">
-                            <i class="fab fa-whatsapp"></i>
+                           class="whatsapp-btn-3d">
+                            <i class="fab fa-whatsapp" style="font-size: 22px;"></i>
                             ابدأ محادثة واتساب الآن
                         </a>
                     </div>
                 </div>
-                <form class="contact-form" onsubmit="sendToWhatsApp(event)">
+
+                <form class="contact-form" onsubmit="sendToWhatsApp(event)" data-tilt data-tilt-max="5" data-tilt-speed="500">
                     <div class="form-group">
                         <label>الاسم الكامل</label>
                         <input type="text" id="waName" placeholder="أدخل اسمك" required>
@@ -1186,8 +1173,8 @@
                         <label>رسالتك</label>
                         <textarea id="waMessage" placeholder="اكتب رسالتك هنا..." required></textarea>
                     </div>
-                    <button type="submit" class="submit-btn whatsapp">
-                        <i class="fab fa-whatsapp"></i>
+                    <button type="submit" class="whatsapp-btn-3d w-100">
+                        <i class="fab fa-whatsapp" style="font-size: 22px;"></i>
                         إرسال عبر واتساب
                     </button>
                 </form>
@@ -1195,7 +1182,7 @@
         </div>
     </section>
 
-    <!-- زر واتساب عائم -->
+    <!-- زر واتساب عائم 3D -->
     <a href="https://wa.me/201211372060?text=مرحباً،%20أريد%20الاستفسار%20عن%20منتجات%20كنوز%20الطحينة"
        target="_blank"
        rel="noopener"
@@ -1253,86 +1240,137 @@
         </div>
     </footer>
 
+    <!-- مكتبة Vanilla-Tilt للتأثير ثلاثي الأبعاد (دعم الماوس والجيروسكوب للهواتف) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
     <script>
-        // قائمة الجوال
+        // 1. قائمة الجوال
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
-
         menuToggle.addEventListener('click', () => {
             navLinks.classList.toggle('active');
         });
-
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
             });
         });
 
-        // تمرير سلس
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // تأثير التمرير على شريط التنقل
+        // 2. تأثير التمرير على شريط التنقل
+        const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 100) {
-                navbar.style.padding = '10px 5%';
-                navbar.style.boxShadow = '0 5px 30px rgba(0,0,0,0.1)';
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
             } else {
-                navbar.style.padding = '15px 5%';
-                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.05)';
+                navbar.classList.remove('scrolled');
             }
         });
 
-        // إرسال نموذج التواصل عبر واتساب
+        // 3. إرسال نموذج التواصل عبر واتساب
         function sendToWhatsApp(e) {
             e.preventDefault();
-
             const name = document.getElementById('waName').value.trim();
             const phone = document.getElementById('waPhone').value.trim();
             const message = document.getElementById('waMessage').value.trim();
-
             const whatsappNumber = '201211372060';
-
             let text = `مرحباً، أنا ${name}\n`;
             if (phone) {
                 text += `رقم هاتفي: ${phone}\n`;
             }
             text += `\n${message}`;
-
             const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
             window.open(url, '_blank', 'noopener');
-
             e.target.reset();
         }
 
-        // تأثير ظهور العناصر
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // 4. محرك الخلفية ثلاثية الأبعاد (قطرات الطحينة الذهبية وحبوب السمسم العائمة)
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle3D {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height;
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                // محاكاة العمق 3D (Z-index)
+                this.z = Math.random() * 2 + 0.5;
+                this.size = (Math.random() * 6 + 3) * this.z;
+                this.speedY = (Math.random() * 0.8 + 0.3) * this.z;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.35 + 0.1;
+                this.angle = Math.random() * Math.PI * 2;
+                this.spin = (Math.random() - 0.5) * 0.02;
+            }
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX + Math.sin(this.angle) * 0.3;
+                this.angle += this.spin;
+                if (this.y < -30) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                // رسم شكل حبة سمسم / قطرة ذهبية ثلاثية الأبعاد
+                const grad = ctx.createRadialGradient(0, 0, 1, 0, 0, this.size);
+                grad.addColorStop(0, `rgba(255, 215, 0, ${this.opacity})`);
+                grad.addColorStop(1, `rgba(212, 160, 23, 0)`);
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size * 0.65, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // ضبط عدد الجزيئات حسب حجم الشاشة لضمان سرعة فائقة على الهواتف
+        const particleCount = window.innerWidth < 768 ? 22 : 45;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle3D());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // 5. تأثير دخول العناصر ثلاثي الأبعاد عند التمرير (3D Scroll Reveal)
+        const observerOptions = {
+            threshold: 0.12,
+            rootMargin: '0px 0px -40px 0px'
+        };
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'perspective(1000px) translateY(0) rotateX(0deg) scale(1)';
+                    }, index * 80);
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'all 0.6s ease';
-            observer.observe(card);
+        document.querySelectorAll('.feature-card, .contact-item, .download').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'perspective(1000px) translateY(50px) rotateX(15deg) scale(0.92)';
+            el.style.transition = 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            observer.observe(el);
         });
     </script>
 </body>
