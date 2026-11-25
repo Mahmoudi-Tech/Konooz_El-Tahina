@@ -559,7 +559,7 @@ export default function App() {
               <span className="soon-badge">قريباً</span>
             </div>
             <a
-              href="https://github.com/Mahmoudi-Tech/Konooz_El-Tahina/releases/download/v1.3.0/Konooz_El-Tahina-V1.3.0.apk"
+              href="https://github.com/Mahmoudi-Tech/Konooz_El-Tahina/releases/download/v1.4.0/Konooz_El-Tahina-V1.4.0.apk"
               className="store-btn"
             >
               <i className="fab fa-google-play" />
